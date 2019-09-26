@@ -11,17 +11,42 @@ var winningMessage;
 var won = false;
 var currentScore = 0;
 var winningScore = 100;
+var veneno;
+var estrella;
 
 // add collectable items to the game
 function addItems() {
   items = game.add.physicsGroup();
-  createItem(375, 300, 'coin');
+  veneno=game.add.physicsGroup();
+  estrella=game.add.physicsGroup();
+  createItem(545, 120, 'coin');
+  createItem(160, 420, 'coin');
+  createItem(450, 330, 'coin');
+  createItem(120, 250, 'coin');
+  createItem(660, 10, 'coin');
+  createItem(630, 500, 'coin');
+  createItem(630, 250, 'coin');
+  createItem(50, 30, 'coin');
+  createItem(320, 10, 'coin');
+  createItem(230, 150, 'coin');
+  createPoison(200, 150, 'poison');
+  createPoison(450, 300, 'poison');
+  CreateEstrella(520,100,'star');
 }
 
 // add platforms to the game
 function addPlatforms() {
   platforms = game.add.physicsGroup();
-  platforms.create(450, 150, 'platform');
+  platforms.create(450, 200, 'platform');
+  platforms.create(100, 500, 'platform');
+  platforms.create(380, 420, 'platform');
+  platforms.create(20, 300, 'platform');
+  platforms.create(180, 200, 'platform');
+  platforms.create(550, 550, 'platform');
+   platforms.create(1, 100, 'platform');
+   platforms.create(520, 300, 'platform');
+   platforms.create(260, 70, 'platform');
+   platforms.create(600, 65, 'platform');
   platforms.setAll('body.immovable', true);
 }
 
@@ -31,7 +56,21 @@ function createItem(left, top, image) {
   item.animations.add('spin');
   item.animations.play('spin', 10, true);
 }
-
+function createPoison(left, top, image) {
+  var item = veneno.create(left, top, image);
+  item.animations.add('spin');
+  item.animations.play('spin', 10, true);
+}
+function createPoison(left, top, image) {
+  var item = veneno.create(left, top, image);
+  item.animations.add('spin');
+  item.animations.play('spin', 10, true);
+}
+function CreateEstrella(left, top, image) {
+  var item = estrella.create(left, top, image);
+  item.animations.add('spin');
+  item.animations.play('spin', 10, true);
+}
 // create the winning badge and add to screen
 function createBadge() {
   badges = game.add.physicsGroup();
@@ -48,7 +87,16 @@ function itemHandler(player, item) {
       createBadge();
   }
 }
-
+function venenoHandler(player, veneno) {
+  veneno.kill();
+  currentScore = currentScore - 10;
+  
+}
+function starHandler(player, estrella) {
+  estrella.kill();
+  currentScore = currentScore +50;
+  
+}
 // when the player collects the badge at the end of the game
 function badgeHandler(player, badge) {
   badge.kill();
@@ -67,9 +115,11 @@ window.onload = function () {
     game.load.image('platform', 'platform_1.png');
     
     //Load spritesheets
-    game.load.spritesheet('player', 'chalkers.png', 48, 62);
+    game.load.spritesheet('player', 'mikethefrog.png', 32, 32);
     game.load.spritesheet('coin', 'coin.png', 36, 44);
     game.load.spritesheet('badge', 'badge.png', 42, 54);
+    game.load.spritesheet('poison','poison.png',32,32);
+    game.load.spritesheet('star','star.png',32,32);
   }
 
   // initial game set up
@@ -96,6 +146,8 @@ window.onload = function () {
     text.text = "SCORE: " + currentScore;
     game.physics.arcade.collide(player, platforms);
     game.physics.arcade.overlap(player, items, itemHandler);
+    game.physics.arcade.overlap(player, veneno, venenoHandler);
+    game.physics.arcade.overlap(player, estrella, starHandler);
     game.physics.arcade.overlap(player, badges, badgeHandler);
     player.body.velocity.x = 0;
 
